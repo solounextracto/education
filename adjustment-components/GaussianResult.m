@@ -1,4 +1,4 @@
-classdef GausianResult < handle
+classdef GaussianResult < handle
     properties
         A
         l

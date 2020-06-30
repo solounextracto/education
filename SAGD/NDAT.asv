@@ -15,7 +15,6 @@ classdef NDAT < handle
         d   % class width
         type    % degrees or edge measured.
         check
-        ChiSquare
     end
     methods
         function self = NDAT(data, type)
@@ -25,18 +24,15 @@ classdef NDAT < handle
         
         function init(self)
             self.typecheck() ;
+            self.createMean() ;
+            self.createSd() ;
             self.classNumber() ;
             self.classWidth() ;
             self.degreesofFreedom() ;
-            self.createMean() ;
-            self.createSd() ;
         end
         
-        function chisquare(self, degrees)
-            self.init() ;
-            chi = chiSquare(self.data, self.k, self.d, self.mn, self.sd, self.check) ;
-            self.ChiSquare = chi ;
-            self.test(chi.chivalue, degrees) ;
+        function chisquare(self)
+            [out] = chiSquare(self.data, self.k, self.d, ort, std, check)
         end
         
         function classNumber(self)
@@ -44,7 +40,7 @@ classdef NDAT < handle
         end
         
         function classWidth(self)
-            self.d = round(((max(self.data) - min(self.data)) / self.k)*(self.check(1)), 1) ;
+            self.d = round(((max(self.data) - min(self.data)) / self.k)*(self.check(1))) ;
         end
         
         function createMean(self)
@@ -59,7 +55,7 @@ classdef NDAT < handle
             if strcmpi(self.type, 'degrees')
                 self.check = [10000, 5] ;
             elseif strcmpi(self.type, 'edge')
-                self.check = [1000, 3] ;
+                self.check = [100, 3] ;
             end
         end
         
@@ -68,18 +64,6 @@ classdef NDAT < handle
                 self.f = self.k - 3 ;
             else
                 self.f = self.k - 1 ;
-            end
-        end
-        
-        function test(self, testvalue, degrees)
-            if nargin < 3
-                degrees = 5 ;
-            end
-            table = chi2inv(1 - degrees/100, self.f) ;
-            if testvalue < table
-                fprintf('ChiSquare: %.2f < Table: %.2f , The data examined are normal distribution\n', testvalue, table) ; 
-            else
-                fprintf('ChiSquare: %.2f > Table: %.2f , The data examined are not normal distribution\n', testvalue, table) ; 
             end
         end
     end

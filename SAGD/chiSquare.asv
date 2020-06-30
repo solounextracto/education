@@ -1,0 +1,7 @@
+function [out] = chiSquare(data, check, )
+s = num2str(round(min(data), check(2))) ;
+x = str2double(s(end-1:end)) ;
+count = 1 ;
+
+out = 1 ;
+end
