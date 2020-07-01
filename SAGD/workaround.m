@@ -6,4 +6,9 @@ load edge.mat
 % out = chiSquare(S, check, 7, 1, 98.06067, 1.94);
 
 out = NDAT(S, 'edge');
-out.chisquare(5) ;
+
+% out.kolmogorov_smirnov(5) ;
+
+% out.chisquare(5)
+
+% out.kurtosis(5) ;
