@@ -72,7 +72,7 @@ classdef GeodeticTransform < handle
     end
     methods (Access = private)
         function selectionTransform(self)
-            if strcmpi(self.Selection, 'Affine')
+            if strcmpi(self.Selection, 'Helmert')
                 self.Transform = 'NonreflectiveSimilarity' ;
                 % ...
             end

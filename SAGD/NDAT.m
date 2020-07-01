@@ -41,6 +41,14 @@ classdef NDAT < handle
             self.test(chi.chivalue, degrees) ;
         end
         
+        function mannwald(self, degrees)
+            self.TestName = 'Mann-Wald' ;
+            self.init() ;
+            mw = mannWald(self.data, self.k, self.mn, self.sd, self.check) ;
+            self.OUTPUT = mw ;
+            self.test(mw.mannwald, degrees) ;
+        end
+        
         function kolmogorov_smirnov(self, degrees)
             self.TestName = 'Kolmogorov-Smirnov' ;
             self.init() ;
@@ -66,7 +74,8 @@ classdef NDAT < handle
         function classNumber(self)
             if strcmp(self.TestName, 'ChiSquare')
                 self.k = ceil(sqrt(numel(self.data)) + 1) ;
-            elseif strcmp(self.TestName, 'Kolmogorov-Smirnov')
+            elseif strcmp(self.TestName, 'Kolmogorov-Smirnov') || ...
+                    strcmp(self.TestName, 'Mann-Wald')
                 self.k = ceil(sqrt(numel(self.data)) + 3) ;
             elseif strcmp(self.TestName, 'Crooked Kurtosis')
                 self.k = 0 ;
@@ -107,7 +116,9 @@ classdef NDAT < handle
         end
            
         function test(self, testvalue, degrees)
-            if strcmp(self.TestName, 'ChiSquare') || strcmp(self.TestName, 'Crooked Kurtosis')
+            if strcmp(self.TestName, 'ChiSquare') || ...
+                    strcmp(self.TestName, 'Mann-Wald') || ...
+                    strcmp(self.TestName, 'Crooked Kurtosis')
                 table = chi2inv(1 - degrees/100, self.f) ;
             elseif strcmp(self.TestName, 'Kolmogorov-Smirnov')
                 if degrees == 5 
@@ -118,19 +129,11 @@ classdef NDAT < handle
                 table = c / sqrt(numel(self.data)) ;
             end
             if testvalue < table
-                fprintf('Hypotesis, %s: %.4f < Table: %.2f , The data examined are normal distribution\n', self.TestName, testvalue, table) ; 
+                fprintf('Hypotesis, %s: %.4f < Table: %.2f , The data examined are normal distribution\n', ...
+                    self.TestName, testvalue, table) ; 
             else
-                fprintf('Hypotesis, %s: %.4f > Table: %.2f , The data examined are not normal distribution\n', self.TestName, testvalue, table) ; 
-            end
-        end
-    end
-    
-    methods (Static)
-        function [out] = checkDegrees(varargin)
-            if isempty(self.degrees)
-                out = 5 ;
-            else
-                out = varargin{1} ;
+                fprintf('Hypotesis, %s: %.4f > Table: %.2f , The data examined are not normal distribution\n', ...
+                    self.TestName, testvalue, table) ; 
             end
         end
     end

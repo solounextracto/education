@@ -50,11 +50,11 @@ for i = 1 : numel(input.x) - 1
     out.ni(i) = ncount ;
 end
 
-out.d = d ;
 pi = diff(out.fiz) ;
 out.pi = round(pi(2:end-1), 4) ;
 out.npi = numel(data) .* out.pi ;
 out.ni_npi = round(out.ni - out.npi, 2) ;
 out.chivalue = round(sum(((out.ni_npi).^2) ./ out.npi), 3) ;
+out.d = d ;
 
 end

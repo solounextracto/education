@@ -48,7 +48,7 @@ for i = 1 : numel(input.x) - 1
     out.ni(i) = ncount ;
 end
 
-out.d = d ;
+
 out.ni = [0, out.ni] ;
 out.Kx = cumsum(out.ni) ;
 out.Hx = round(out.Kx ./ numel(data), 2) ;
@@ -56,5 +56,6 @@ out.fiz = round(normcdf(out.z), 4) ;
 out.D0 = round(out.Hx - out.fiz, 4) ;
 
 out.ksvalue = round(max(abs(out.D0)), 4) ;
+out.d = d ;
 
 end

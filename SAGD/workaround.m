@@ -12,3 +12,5 @@ out = NDAT(S, 'edge');
 % out.chisquare(5)
 
 % out.kurtosis(5) ;
+
+% out.mannwald(5) ;

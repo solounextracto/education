@@ -13,4 +13,4 @@ data = importdata('ed50itrf.txt');
 ed50 = data(:,1:2);
 itrf = data(:, 3:4);
 
-ex.transform(ed50,itrf,'affine')
+ex.transform(ed50,itrf,'Helmert')
