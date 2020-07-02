@@ -18,9 +18,8 @@ classdef NDAT < handle
         check
     end
     methods
-        function self = NDAT(data, type)
+        function self = NDAT(data)
             self.data = data ;
-            self.type = type ;
         end
         
         function init(self)
@@ -99,6 +98,13 @@ classdef NDAT < handle
         end
         
         function typecheck(self)
+            str =  regexp(num2str(self.data(1)), '\.', 'split') ;
+            if numel(str{2}) >= 2 && numel(str{2}) <= 3
+                self.type = 'edge' ;
+            elseif numel(str{2}) >= 4 && numel(str{2}) <= 5
+                self.type = 'degrees' ;
+            end
+            
             if strcmpi(self.type, 'degrees')
                 self.check = [1e4, 5] ;
             elseif strcmpi(self.type, 'edge')

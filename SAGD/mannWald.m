@@ -13,7 +13,7 @@ xmean = str2double(xmean(end-df(1):end)) ;
 x = round(z.*sd + xmean, 2) ;
 
 out.fiz = fiz ;
-out.z = z ;
+out.z = round(z, 2) ;
 
 for i = 1 : numel(x) - 1
     ncount = 0;

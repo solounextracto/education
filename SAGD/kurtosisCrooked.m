@@ -18,9 +18,9 @@ else
     fprintf('|z1|=%.3f > z=%.2f , since there is distortion in the distribution of the measurements\n', abs(z1), zscore) ;
 end
 if abs(z2) < zscore % basýklýk
-    fprintf('|z1|=%.3f < z=%.2f , since there is no distortion in the kurtosis of the measurements\n', abs(z2), zscore) ;
+    fprintf('|z2|=%.3f < z=%.2f , since there is no distortion in the kurtosis of the measurements\n', abs(z2), zscore) ;
 else
-    fprintf('|z1|=%.3f > z=%.2f , since there is distortion in the distribution of the measurements\n', abs(z2), zscore) ;
+    fprintf('|z2|=%.3f > z=%.2f , since there is distortion in the distribution of the measurements\n', abs(z2), zscore) ;
 end
 
 out.c1 = c1 ;
