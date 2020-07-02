@@ -29,7 +29,11 @@ classdef LevelNet < Adjustment.EnDirectAdjustment.EnDirect
         function degreeOfFreedom(self)
             n = size(self.A, 1) ;
             u = size(self.A, 2) ;
-            self.f = n - u ;
+            if strcmpi(self.Type, 'Zorlamalý Dengeleme')
+                self.f = n - u ;
+            else
+                self.f = n - u + 1 ; % 1 - levelNet datum parameters (d)
+            end
         end
     end
     

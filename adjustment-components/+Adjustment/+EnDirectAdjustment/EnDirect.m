@@ -1,5 +1,6 @@
 classdef EnDirect < handle
     properties
+        Type
         Data % Veri seti
         A % katsayýlar matrisi
         l % ötelenmiþ ölçüler
@@ -55,9 +56,22 @@ classdef EnDirect < handle
         
         function normalEquation(self)
             % normal denklemler (mm)
+            for i = 1 : size(self.A, 1)
+                count.matrix(i) = numel(nonzeros(self.A(i, :))) ;
+            end
+            check = any(count.matrix < 2) ;
+            
             N = self.A' * self.P * self.A;
             n = self.A' * self.P * self.l;
-            self.Qxx = N^-1;
+            
+            if check
+                self.Qxx = inv(N);
+                self.Type = 'Zorlamalý Dengeleme' ;
+            else
+                self.Qxx = pinv(N) ;
+                self.Type = 'Serbest Dengeleme' ;
+            end
+            
             self.x = self.Qxx * n ;
         end
         function adjustments(self)
@@ -96,7 +110,7 @@ classdef EnDirect < handle
             self.ti = abs(self.V) ./ (self.s0i .* sqrt(diag(self.Qvv))); % test büyüklüðü
             self.re_t_Test(alpha)
         end
-        
+
         function checkAdjust(self)
             if self.f == 0
                 disp(['f : ',num2str(self.f),' = 0 olduðundan, Tek anlamlý cebrik çözüm yapýlmalý'])
@@ -110,18 +124,25 @@ classdef EnDirect < handle
     
     methods
         function re_t_Test(self, alpha)
-            idx = find(max(self.ti)) ;
+            [val, idx] = max(self.ti);
             alph = 1-sqrt(1-((alpha/100)/2));
             if max(self.ti) >= tinv(1-alph, self.f - 1) % alph = ((alpha/100) / 2)
                 import Adjustment.EnDirectAdjustment.EnDirect
                 fprintf('%.5f ölçüsü uyuþumsuzdur \n', self.Data(idx))
-                fprintf('T=%.3f > t=%.3f , Hs hipotezi geçerlidir.\n', max(self.ti), tinv(1-alph, self.f - 1))
+                fprintf('T=%.3f > t=%.3f , Hs hipotezi geçerlidir.\n', val, tinv(1-alph, self.f - 1))
                 % ölçü uyuþumsuzdur. Bu ölçü çýkarýlarak dengeleme yeniden
                 % yapýlýp ayný iþlemler uyuþumsuz ölçü kalmayana kadar
                 % devam eder.
-                self.Data(idx) = [] ;
-                self.buildAdjust() ;
-                self.t_Test(alpha)
+                try
+                    self.Data(idx) = [] ;
+                    self.stochasticsModel() ;
+                    self.functionalModel();
+                    self.accuracy();
+                    self.t_Test(alpha)
+                catch
+                    disp('Yeterli Ölçü Bulunmamaktadýr')
+                        return ;
+                end
 %                 clear import
             else
                 disp('ölçüler uyuþumsuz deðildir')
