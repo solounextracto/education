@@ -1,7 +1,13 @@
 % 
 clc; clear all;
 
-load edge.mat
+% load edge.mat
+pdfname = '';
+start = '';
+finish = '';
+originaldata = [];
+
+S = readpdfdata(pdfname,start,finish,originaldata);
 % check = [10000, 5] ;
 % out = chiSquare(S, check, 7, 1, 98.06067, 1.94);
 
