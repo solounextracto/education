@@ -1,5 +1,5 @@
 %--------------------------------------------------------------------------
-%#  Title  : Sobel Algorihm
+%#  Title  : Sobel Algorithm
 %#  Date   : 04.08.2020
 %#  Author : @sue
 %#
@@ -15,7 +15,7 @@
 % figure, imshowpair(inputImage,outputImage,'montage')
 % 
 %--------------------------------------------------------------------------
-function output = sobelAlgorithdfasdam(im, element)
+function output = sobelAlgorithm(im, element)
 
 if element <= 0
    element = 3;
